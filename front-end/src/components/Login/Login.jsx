@@ -13,8 +13,8 @@ function Login() {
     console.log("Usuario logueado:", decodedToken);
     const userData = {
       email: decodedToken.email,
-      family_name: decodedToken.family_name,
-      given_name: decodedToken.given_name,
+      apellido: decodedToken.family_name,
+      nombre: decodedToken.given_name,
     };
     fetch('http://localhost:5000/api/users', {
       method: 'POST',

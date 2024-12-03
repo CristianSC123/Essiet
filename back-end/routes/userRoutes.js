@@ -4,11 +4,11 @@ const User = require('../models/User');
 
 router.post('/', async (req, res) => {
   try {
-    const { email, family_name, given_name } = req.body;
+    const { email, apellido, nombre } = req.body;
 
     let user = await User.findOne({ email });
     if (!user) {
-      user = new User({ email, family_name, given_name });
+      user = new User({ email, apellido, nombre });
       await user.save();
     }
 
@@ -18,4 +18,41 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.get('/', async (req, res) => {
+  try {
+    const usuarios = await User.find();
+    if (!usuarios.length) {
+      return res.status(404).json({ message: 'No se encontraron usuarios' });
+    }
+    res.json(usuarios);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener los usuarios', error: error.message });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  const { nombre, apellido, email, telefono } = req.body;
+
+  if (!nombre || !apellido || !email || !telefono) {
+    return res.status(400).json({ message: 'Faltan datos para actualizar el Usuario' });
+  }
+
+  try {
+    const updatedUsuario = await User.findByIdAndUpdate(
+      req.params.id,
+      { nombre, apellido, email, telefono },
+      { new: true }
+    );
+
+    if (!updatedUsuario) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    res.json(updatedUsuario);
+  } catch (error) {
+    res.status(400).json({ message: 'Error al actualizar usuario', error: error.message });
+  }
+});
+
 module.exports = router;
+

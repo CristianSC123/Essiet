@@ -15,6 +15,11 @@ mongoose
   .catch((err) => console.error('Error al conectar a MongoDB:', err));
 
 const userRoutes = require('./routes/userRoutes');
+const tecnicosRoutes = require("./routes/tecnicoRoutes")
+const pantallaRoutes = require("./routes/pantallaRoutes")
+
 app.use('/api/users', userRoutes);
+app.use('/api/tecnicos', tecnicosRoutes )
+app.use('/api/pantallas', pantallaRoutes)
 
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
