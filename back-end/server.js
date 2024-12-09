@@ -17,9 +17,12 @@ mongoose
 const userRoutes = require('./routes/userRoutes');
 const tecnicosRoutes = require("./routes/tecnicoRoutes")
 const pantallaRoutes = require("./routes/pantallaRoutes")
+const ventaRoutes = require("./routes/ventaRoutes");
 
 app.use('/api/users', userRoutes);
 app.use('/api/tecnicos', tecnicosRoutes )
 app.use('/api/pantallas', pantallaRoutes)
+app.use("/api/ventas", ventaRoutes);
+
 
 app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));

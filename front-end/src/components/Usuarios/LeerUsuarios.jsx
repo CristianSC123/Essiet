@@ -10,7 +10,6 @@ function LeerUsuarios({ usuarios, setEditUsuario, handleDeleteUsuario }) {
           <TableRow>
             <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', color: 'white'}}>Nombre</TableCell>
             <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', color: 'white'}}>Apellidos</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', color: 'white'}}>Teléfono</TableCell>
             <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', color: 'white'}}>Email</TableCell>
             <TableCell sx={{ fontWeight: 'bold', textAlign: 'center', color: 'white'}}>Acciones</TableCell>
           </TableRow>
@@ -20,7 +19,6 @@ function LeerUsuarios({ usuarios, setEditUsuario, handleDeleteUsuario }) {
             <TableRow key={usuario._id}>
               <TableCell align="center">{usuario.nombre}</TableCell>
               <TableCell align="center">{usuario.apellido}</TableCell>
-              <TableCell align="center">{usuario.telefono}</TableCell>
               <TableCell align="center">{usuario.email}</TableCell>
               <TableCell align="center">
                 <Button onClick={() => setEditUsuario(usuario)} 

@@ -1,42 +1,54 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
+import Swal from "sweetalert2";
 
 function Login() {
   const nav = useNavigate();
-  const clientID = "988582702143-vlvr8era9qunmbgcmk4vf093u32jf6ca.apps.googleusercontent.com"
+  const clientID = "988582702143-vlvr8era9qunmbgcmk4vf093u32jf6ca.apps.googleusercontent.com";
   const [user, setUser] = useState(null);
 
-  const handleSuccess = (credentialResponse) => {
-    const decodedToken = JSON.parse(atob(credentialResponse.credential.split(".")[1]));
-    setUser(decodedToken);
-    console.log("Usuario logueado:", decodedToken);
-    const userData = {
-      email: decodedToken.email,
-      apellido: decodedToken.family_name,
-      nombre: decodedToken.given_name,
-    };
-    fetch('http://localhost:5000/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log('Usuario guardado:', data))
-      .catch((error) => console.error('Error al guardar usuario:', error));
-    nav("./Dashboard")
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
+  const handleSuccess = async (credentialResponse) => {
+    const decodedToken = JSON.parse(atob(credentialResponse.credential.split(".")[1]));
+    const email = decodedToken.email;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/users?email=${email}`);
+      const data = await response.json();
+
+      console.log(data)
+      console.log(response)
+
+
+      if (response.ok && data) {
+        setUser({ ...data });
+        localStorage.setItem("user", JSON.stringify(data));
+        Swal.fire("Bienvenido", "Inicio de sesión exitoso", "success");
+        nav("./Dashboard");
+      } else {
+        Swal.fire("Acceso denegado", "El correo no está registrado", "error");
+      }
+    } catch (error) {
+      Swal.fire("Error", "Ocurrió un problema al verificar el usuario", "error");
+    }
   };
 
   const handleError = () => {
-    console.error("Error en el login");
+    Swal.fire("Error", "No se pudo iniciar sesión con Google", "error");
   };
 
   const handleLogout = () => {
     googleLogout();
     setUser(null);
+    localStorage.removeItem("user");
+    Swal.fire("Sesión cerrada", "Has cerrado sesión correctamente", "info");
   };
 
   return (
@@ -67,7 +79,7 @@ function Login() {
                   className="w-20 h-20 rounded-full mx-auto mb-4"
                 />
                 <h3 className="text-xl font-semibold text-[#055C9D]">
-                  Hola, {user.name}!
+                  Hola, {user.nombre}!
                 </h3>
                 <p className="text-gray-600">{user.email}</p>
               </div>

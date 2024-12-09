@@ -1,5 +1,7 @@
 import React from 'react';
 import { Modal, Box, TextField, Button, Typography, Stack } from '@mui/material';
+import Swal from 'sweetalert2';
+
 
 function EditarUsuario({ editUsuario, setEditUsuario, handleEditUsuario }) {
   const handleSaveWithAlert = () => {
@@ -49,18 +51,18 @@ function EditarUsuario({ editUsuario, setEditUsuario, handleEditUsuario }) {
             onChange={(e) => setEditUsuario({ ...editUsuario, email: e.target.value })}
             fullWidth
           />
-          <TextField
-            label="Teléfono"
-            value={editUsuario.telefono}
-            onChange={(e) => setEditUsuario({ ...editUsuario, telefono: e.target.value })}
-            fullWidth
-          />
-          
+
           <Stack direction="row" spacing={2}>
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSaveWithAlert}
+              onClick={() => {
+                if (!editUsuario.nombre || !editUsuario.apellido || !editUsuario.email) {
+                  Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
+                } else {
+                  handleSaveWithAlert();
+                }
+              }}
               fullWidth
             >
               Guardar Cambios

@@ -4,6 +4,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import Tecnicos from '../Tecnicos/Tecnicos';
 import Pantallas from '../Pantallas/Pantallas';
 import Usuarios from '../Usuarios/Usuarios';
+import Ventas from '../Ventas/Ventas';
 
 function Dashboard() {
   const [activeModule, setActiveModule] = useState('technicians');
@@ -53,6 +54,8 @@ function Dashboard() {
           {activeModule === 'technicians' && <Tecnicos />}
           {activeModule === 'parts' && <Pantallas />}
           {activeModule === 'users' && <Usuarios/>}
+          {activeModule === 'sales' && <Ventas/>}
+
         </div>
       </main>
     </div>

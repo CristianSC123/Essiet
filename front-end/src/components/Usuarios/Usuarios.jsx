@@ -12,7 +12,6 @@ function Usuarios() {
     nombre: '',
     apellido: '',
     email: '',
-    telefono: '',
   });
   const [editUsuario, setEditUsuario] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -31,22 +30,28 @@ function Usuarios() {
   };
 
   const handleCreateUsuario = async () => {
+    if (!newUsuario.nombre || !newUsuario.apellido || !newUsuario.email) {
+      Swal.fire('Error', 'Todos los campos son obligatorios', 'error');
+      return;
+    }
+  
     try {
       const response = await axios.post('http://localhost:5000/api/users', newUsuario);
       setUsuarios([...usuarios, response.data]);
-      setNewUsuario({nombre: '', apellido: '', email: '', telefono: '' });
+      setNewUsuario({ nombre: '', apellido: '', email: '' });
       setOpenModal(false);
       Swal.fire('Éxito', 'Usuario agregado correctamente', 'success');
     } catch (error) {
       Swal.fire('Error', 'Error al agregar usuario', 'error');
     }
   };
+  
 
   const handleEditUsuario = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/users/${editUsuario._id}`, editUsuario);  // Usamos el _id en lugar del email
+      const response = await axios.put(`http://localhost:5000/api/users/${editUsuario._id}`, editUsuario);
       const updatedUsuarios = usuarios.map(usuario =>
-        usuario._id === editUsuario._id ? response.data : usuario // Usamos _id también aquí
+        usuario._id === editUsuario._id ? response.data : usuario
       );
       setUsuarios(updatedUsuarios);
       setEditUsuario(null);
