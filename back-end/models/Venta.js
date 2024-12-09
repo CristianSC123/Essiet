@@ -4,19 +4,19 @@ const ventaSchema = new mongoose.Schema(
   {
     usuario: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "usuarios",
+      ref: "User",
       required: true,
     },
     tecnico: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "tecnicos",
+      ref: "Tecnico",
       required: true,
     },
     items: [
       {
         pantalla: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "pantallas",
+          ref: "Pantalla",
           required: true,
         },
         cantidad: {

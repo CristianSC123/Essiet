@@ -6,6 +6,7 @@ import {
   IconButton,
   Box,
   Autocomplete,
+  Typography,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -22,7 +23,7 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
   const [pantallasOptions, setPantallasOptions] = useState([]);
   const [error, setError] = useState(null);
 
-  const usuario = JSON.parse(localStorage.getItem("usuario"));
+  const usuario = JSON.parse(localStorage.getItem("user"));
 
   const fetchTecnicos = async (search) => {
     try {
@@ -86,7 +87,7 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
           }
           return item;
         })
-        .filter((item) => item !== null) // Elimina elementos con cantidad <= 0
+        .filter((item) => item !== null)
     );
   };
 
@@ -99,7 +100,7 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
   const handleFinalizarVenta = async () => {
     try {
       const ventaData = {
-        usuario: usuario._id,
+        usuario: usuario[0]._id,
         tecnico: tecnico._id,
         items: carrito.map((item) => ({
           pantalla: item.pantalla._id,
@@ -107,7 +108,7 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
           precio: item.pantalla.precio * item.cantidad,
         })),
       };
-
+      console.log("Datos de la venta:", ventaData);
       await axios.post("http://localhost:5000/api/ventas", ventaData);
       setCarrito([]);
       setTecnico(null);
@@ -121,8 +122,23 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={{ padding: 4, backgroundColor: "white", margin: "auto", width: "50%" }}>
-        <h2>Nueva Venta</h2>
+      <Box
+        sx={{
+          padding: 4,
+          backgroundColor: "white",
+          margin: "auto",
+          width: "50%",
+          borderRadius: 4,
+          boxShadow: 24,
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Typography variant="h4" sx={{ marginBottom: 3 }}>
+          Nueva Venta
+        </Typography>
 
         {/* Autocomplete para Técnicos */}
         <Autocomplete
@@ -130,11 +146,12 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
           getOptionLabel={(option) => option.nombre}
           onInputChange={(e, value) => fetchTecnicos(value)}
           onChange={(e, value) => setTecnico(value)}
-          renderInput={(params) => <TextField {...params} label="Buscar Técnico" />}
-          sx={{ marginBottom: 2 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Buscar Técnico" sx={{ marginBottom: 3 }} />
+          )}
         />
 
-        {tecnico && <p>Técnico Seleccionado: {tecnico.nombre}</p>}
+        {tecnico && <Typography variant="subtitle1">Técnico Seleccionado: {tecnico.nombre}</Typography>}
 
         {/* Autocomplete para Pantallas */}
         <Autocomplete
@@ -142,40 +159,41 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
           getOptionLabel={(option) => `${option.modelo} (${option.calidad})`}
           onInputChange={(e, value) => fetchPantallas(value)}
           onChange={(e, value) => setPantalla(value)}
-          renderInput={(params) => <TextField {...params} label="Buscar Pantalla" />}
-          sx={{ marginBottom: 2 }}
+          renderInput={(params) => (
+            <TextField {...params} label="Buscar Pantalla" sx={{ marginBottom: 3 }} />
+          )}
         />
 
         {pantalla && (
-          <div>
-            <p>
-              Modelo: {pantalla.modelo} - Calidad: {pantalla.calidad} - Stock:{" "}
-              {pantalla.cantidad}
-            </p>
-            <Button onClick={handleAgregarAlCarrito}>Agregar al Carrito</Button>
-          </div>
+          <Box sx={{ marginBottom: 3 }}>
+            <Typography>
+              Modelo: {pantalla.modelo} - Calidad: {pantalla.calidad} - Stock: {pantalla.cantidad}
+            </Typography>
+            <Button onClick={handleAgregarAlCarrito} sx={{ marginTop: 1 }}>
+              Agregar al Carrito
+            </Button>
+          </Box>
         )}
 
-        <h3>Carrito</h3>
+        <Typography variant="h5" sx={{ marginBottom: 2 }}>
+          Carrito
+        </Typography>
         {carrito.map((item) => (
-          <div key={item.pantalla._id}>
-            <span>{item.pantalla.modelo} (x{item.cantidad})</span>
-            <IconButton
-              onClick={() => handleCantidadChange(item.pantalla._id, 1)}
-            >
+          <Box key={item.pantalla._id} sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+            <Typography sx={{ flex: 1 }}>
+              {item.pantalla.modelo} (x{item.cantidad}) - Precio: Bs
+              {item.pantalla.precio * item.cantidad}
+            </Typography>
+            <IconButton onClick={() => handleCantidadChange(item.pantalla._id, 1)}>
               <AddIcon />
             </IconButton>
-            <IconButton
-              onClick={() => handleCantidadChange(item.pantalla._id, -1)}
-            >
+            <IconButton onClick={() => handleCantidadChange(item.pantalla._id, -1)}>
               <RemoveIcon />
             </IconButton>
-            <IconButton
-              onClick={() => handleEliminarDelCarrito(item.pantalla._id)}
-            >
+            <IconButton onClick={() => handleEliminarDelCarrito(item.pantalla._id)}>
               <DeleteIcon />
             </IconButton>
-          </div>
+          </Box>
         ))}
 
         <Button
@@ -183,11 +201,12 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
           color="primary"
           onClick={handleFinalizarVenta}
           disabled={!tecnico || carrito.length === 0}
+          sx={{ marginTop: 3 }}
         >
           Finalizar Venta
         </Button>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && <Typography color="error">{error}</Typography>}
       </Box>
     </Modal>
   );

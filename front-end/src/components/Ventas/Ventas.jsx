@@ -31,7 +31,6 @@ const Ventas = () => {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    // Refresh ventas después de una nueva venta
     const fetchVentas = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/ventas");
@@ -67,10 +66,12 @@ const Ventas = () => {
           </TableHead>
           <TableBody>
             {ventas.map((venta) => (
+              
               <TableRow key={venta._id}>
+                {console.log(ventas)}
                 <TableCell>{new Date(venta.fecha).toLocaleDateString()}</TableCell>
-                <TableCell>{venta.tecnico.nombre}</TableCell>
-                <TableCell>{venta.usuario.nombre}</TableCell>
+                <TableCell>{venta.tecnico?.nombre || "Técnico no asignado"}</TableCell>
+                <TableCell>{venta.usuario?.nombre || "Usuario no asignado"}</TableCell>
                 <TableCell>{venta.total}</TableCell>
                 <TableCell>
                   <Button variant="outlined" color="primary">
