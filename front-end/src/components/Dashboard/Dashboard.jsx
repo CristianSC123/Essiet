@@ -48,9 +48,8 @@ function Dashboard() {
         </nav>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 p-6">
-        <CerrarSesion /> {/* Renderiza el componente CerrarSesion */}
+        <CerrarSesion />
         <h2 className="text-3xl font-bold text-[#033D68] mb-4">
           {modules.find((module) => module.id === activeModule)?.name}
         </h2>

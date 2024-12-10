@@ -9,9 +9,9 @@ function CerrarSesion() {
 
   const handleLogout = () => {
     googleLogout();
-    localStorage.removeItem("user"); // Elimina al usuario almacenado
+    localStorage.removeItem("user"); 
     Swal.fire("Sesión cerrada", "Has cerrado sesión correctamente", "info").then(() => {
-      nav("/"); // Redirige al inicio de sesión
+      nav("/")
     });
   };
 

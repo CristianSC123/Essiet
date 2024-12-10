@@ -20,7 +20,7 @@ function EditarTecnico({ editTecnico, setEditTecnico, handleEditTecnico }) {
       confirmButtonText: 'Aceptar',
     });
 
-    setEditTecnico(null); // Cerrar el modal después de guardar
+    setEditTecnico(null);
   };
 
   return (
@@ -75,7 +75,7 @@ function EditarTecnico({ editTecnico, setEditTecnico, handleEditTecnico }) {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSaveWithAlert} // Llamar la nueva función con la alerta
+              onClick={handleSaveWithAlert}
               fullWidth
             >
               Guardar Cambios

@@ -140,7 +140,6 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
           Nueva Venta
         </Typography>
 
-        {/* Autocomplete para Técnicos */}
         <Autocomplete
           options={tecnicosOptions}
           getOptionLabel={(option) => option.nombre}
@@ -153,7 +152,6 @@ const NuevaVenta = ({ open, onClose, onVentaCreada }) => {
 
         {tecnico && <Typography variant="subtitle1">Técnico Seleccionado: {tecnico.nombre}</Typography>}
 
-        {/* Autocomplete para Pantallas */}
         <Autocomplete
           options={pantallasOptions}
           getOptionLabel={(option) => `${option.modelo} (${option.calidad})`}
