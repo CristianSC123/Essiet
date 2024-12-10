@@ -23,11 +23,7 @@ function Login() {
       const response = await fetch(`http://localhost:5000/api/users?email=${email}`);
       const data = await response.json();
 
-      console.log(data)
-      console.log(response)
-
-
-      if (response.ok && data) {
+      if (response.ok && data[0].email === email) {
         setUser({ ...data });
         localStorage.setItem("user", JSON.stringify(data));
         Swal.fire("Bienvenido", "Inicio de sesión exitoso", "success");
