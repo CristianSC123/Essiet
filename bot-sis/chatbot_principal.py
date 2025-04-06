@@ -1,9 +1,14 @@
 import spacy
 from pymongo import MongoClient
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 nlp = spacy.blank("es")
 
-client = MongoClient("mongodb+srv://cristiaansantacruz:65673891sc@cluster1.xdzmd.mongodb.net/essiet?retryWrites=true&w=majority&appName=Cluster1")
+mongo_url = os.getenv("MONGO_URL")
+
+client = MongoClient(mongo_url)
 db = client["essiet"]
 productos = db["pantallas"]
 
